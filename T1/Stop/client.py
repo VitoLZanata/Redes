@@ -1,14 +1,14 @@
 import socket
 
 
-HOST = "192.168.248.102"
+HOST = "192.168.246.29"
 PORT = 9002
 U = "utf-8"
 N_R = 3 
 
-def pedir_entrada_valida(label, letra_alvo):
+def pedir_entrada_valida(categoria, letra_alvo):
     while True:
-        valor = input(f"{label}: ").strip().upper()
+        valor = input(f"{categoria}: ").strip().upper()
         if valor and valor[0].upper() == letra_alvo.upper():
             return valor
         print(f"Entrada inválida! Deve começar com {letra_alvo}.")
@@ -16,6 +16,9 @@ def pedir_entrada_valida(label, letra_alvo):
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as cliente:
     cliente.connect((HOST, PORT))
     print(f"[*] Conectado ao servidor {HOST}:{PORT}")
+    print(cliente.recv(1024).decode(U).strip())
+    nome = input("Digite seu nome: ")
+    cliente.sendall(nome.encode(U))
 
     j = 0
     while j < N_R:
@@ -30,7 +33,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as cliente:
         cep_validado = pedir_entrada_valida("CEP", letra_obrigatoria)
         cliente.sendall(cep_validado.encode(U))
 
-        prof_validado = pedir_entrada_valida("MEU PROFESSOR", letra_obrigatoria)
+        prof_validado = pedir_entrada_valida("MEU PROFESSOR DE REDES É", letra_obrigatoria)
         cliente.sendall(prof_validado.encode(U))
 
         cor_validada = pedir_entrada_valida("COR", letra_obrigatoria)

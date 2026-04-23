@@ -24,9 +24,9 @@ def receber_mensagem_fila(conn, addr):
         hora = datetime.now().strftime("%H:%M:%S")  
         result = f"[{nome} ({addr[0]}) {hora}]\n{mensagem}"
         
-        semaforoFila.acquire()
-        fila.append(result)
-        semaforoFila.release()
+        with semaforoFila:
+            fila.append(result)
+        
  
 def enviar_mensagens_da_fila():
     while True:
